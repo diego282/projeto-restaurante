@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+<%- include('head.ejs'); -%> <! –chama o cabeçalho(head) que esta em outra pasta //–>
+
+<body>
+
+    <div class="gtco-loader"></div>
+
+    <div id="page">
+
+        <%- include('header-menu.ejs'); -%> <! –chama o menu que esta em outra pasta //–>
+
+        <% if ( typeof headerIndex === 'boolean' && headerIndex ) {%> <!–verifica para ver qual vai rendenizar na tela //–>
+            <%- include('header-index.ejs'); -%>  <!–chama o index que esta em outra pasta //–>
+        <% } else { %>
+            <%- include('header.ejs'); -%> <!–chama o header que esta em outra pasta //–>
+        <% } %>

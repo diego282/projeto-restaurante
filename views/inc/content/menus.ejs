@@ -1,0 +1,37 @@
+
+		<div class="gtco-section">
+			<div class="gtco-container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+						<h2 class="cursive-font primary-color">Pratos Populares</h2>
+						<p>Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Quem num gosta di mé, boa
+							gentis num é.</p>
+					</div>
+				</div>
+				<div class="row">
+
+                  <% menus.forEach (function(row){ %>   <! –faz o menu fica dinamico //–>
+ 
+					<div class="col-lg-4 col-md-4 col-sm-6">
+						<a href="<%= row.photo%>" class="fh5co-card-item image-popup">     <! –<%= row.photo%>, traz a foto dinamicamente dos pratos salvo no banco de dados //–>
+							<figure>
+								<div class="overlay">
+									<i class="ti-plus"></i>
+								</div>
+								<img src="<%= row.photo%>" alt="Image" class="img-responsive">   <! –<%= row.photo%>, traz a foto dinamicamente dos pratos salvo no banco de dados //–>
+							</figure>
+							<div class="fh5co-text">
+								<h2><%= row.title%></h2> <! –<%= row.title%>, traz o nome dinamicamente dos pratos salvo no banco de dados //–>
+								<p><%= row.description%></p>  <! –<%= row.description%>, traz a discrisção do prato dinamicamente dos pratos salvo no banco de dados //–>
+								<p>
+									<span class="price cursive-font"><%= row.price%></span>    <! –<%= row.price%>, traz o preço do prato dinamicamente dos pratos salvo no banco de dados //–>
+         
+								</p>
+							</div>
+						</a>
+					</div>
+                  <% }); %>  <! –com isso faz que tudo que esteja dentro seja repetido quantas vezes for necessario //–>
+
+				</div>
+			</div>
+		</div>
