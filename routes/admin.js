@@ -1,9 +1,13 @@
 var express = require('express');
+var moment = require('moment'); // isso vai ajuda a formata a data
 const admin = require('./../inc/admin');
 var users = require('./../inc/users');
 var menus = require('./../inc/menus');
+var reservations = require('./../inc/reservations');
 var router = express.Router();
 let path = require('path');
+
+moment.locale("pt-BR"); // passa para data com nome brasileiro
 
 router.use(function(req, res, next) {
 
@@ -90,6 +94,10 @@ router.get("/emails", function(req, res, next) { // rota de emails na administra
     res.render("admin/emails", admin.getParams(req)) // redeniza a pagina
 });
 
+
+
+// ROUTAS DOS MENUS
+
 router.get("/menus", function(req, res, next) { // rota do menu do restaurante da administração
 
     menus.getMenus().then(data => {
@@ -115,20 +123,148 @@ router.post("/menus", function(req, res, next) { // rota do menu do restaurante 
     })
 
 });
+router.delete('/menus/:id', (req, res, next) => { // deleta itens do menu
+
+    menus.delete(req.params.id).then(data => {
+
+        res.send(data); // redenizar quando de certo, passado o item data
+
+    }).catch(err => { // aqui se de erro
+
+        res.status(400);
+        res.send({ // redeniza o erro
+            error: err
+        });
+
+    });
+
+});
+
+
+
+// ROUTAS DOS RESERVAS
 
 router.get("/reservations", function(req, res, next) { // rota de reservas da administração
 
-    res.render("admin/reservations", admin.getParams(req, { // redeniza a pagina
+    reservations.getReservations().then(data => { // pega as reservas do banco de dados
 
-        date: {}
+        res.render("admin/reservations", admin.getParams(req, { // redeniza a pagina
 
-    }));
+            date: {},
+            data,
+            moment
+
+        }));
+
+    });
 });
+
+router.post("/reservations", function(req, res, next) { // rota do menu do restaurante da administração
+
+    reservations.save(req.fields, req.files).then(results => { // salva o novo item adicionado no menu
+
+        res.send(results); // envia para telas os dados(redenizar)
+
+    }).catch(err => { // ser de erro
+
+        res.send(err); // envia para telas os dados(redenizar), no caso aqui o erro
+
+    })
+
+});
+router.delete('/reservations/:id', (req, res, next) => { // deleta itens do menu
+
+    reservations.delete(req.params.id).then(data => {
+
+        res.send(data); // redenizar quando de certo, passado o item data
+
+    }).catch(err => { // aqui se de erro
+
+        res.status(400);
+        res.send({ // redeniza o erro
+            error: err
+        });
+
+    });
+});
+
+
+
+// ROUTAS DOS USUARIOS
 
 router.get("/users", function(req, res, next) { // rota users da administração
 
-    res.render("admin/users", admin.getParams(req)) // redeniza a pagina
+    users.getUsers().then(data => { // pega as reservas do banco de dados
+
+        res.render("admin/users", admin.getParams(req, { // redeniza a pagina
+
+            data
+        }))
+    });
 });
 
+router.post("/users", function(req, res, next) { // rota do menu do restaurante da administração
+
+    users.save(req.fields, req.files).then(results => { // salva o novo item adicionado no menu
+
+        res.send(results); // envia para telas os dados(redenizar)
+
+    }).catch(err => { // ser de erro
+
+        res.send(err); // envia para telas os dados(redenizar), no caso aqui o erro
+
+    })
+
+});
+
+router.post("/users/password-change", function(req, res, next) { // rota users da administração
+
+    users.changePassword(req).then(data => { // pega as reservas do banco de dados
+
+        res.send(results); // envia para telas os dados(redenizar)
+
+    }).catch(err => { // ser de erro
+
+        res.send({ // envia para telas os dados(redenizar), no caso aqui o erro
+
+            error: err
+        });
+
+    });
+});
+
+
+router.delete('/users/:id', (req, res, next) => { // deleta itens do menu
+
+    users.delete(req.params.id).then(data => {
+
+        res.send(data); // redenizar quando de certo, passado o item data
+
+    }).catch(err => { // aqui se de erro
+
+        res.status(400);
+        res.send({ // redeniza o erro
+            error: err
+        });
+
+    });
+});
+
+// router.delete('/contacts/:id', (req, res, next) => {
+
+//     admin.contactsDelete(req).then(data => {
+
+//         res.send(data);
+
+//     }).catch(err => {
+
+//         res.status(400);
+//         res.send({
+//             error: err
+//         });
+
+//     });
+
+// });
 
 module.exports = router;
