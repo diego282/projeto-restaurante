@@ -52,7 +52,7 @@
                                     <td>
                                         <%= row.price %>
                                     </td>
-                                    <td><button type="button" class="btn btn-xs btn-info btn-update" data-toggle="modal" data-target="#modal-update"><i
+                                    <td><button type="button" class="btn btn-xs btn-info btn-update"><i
                         class="fa fa-pencil"></i> Editar</button>&nbsp;<button type="button" class="btn btn-xs btn-danger btn-delete"><i
                         class="fa fa-trash"></i> Excluir</button></td>
                                 </tr>
@@ -71,7 +71,7 @@
     <div class="modal fade" id="modal-create">
         <div class="modal-dialog">
             <div class="modal-content" style="border-top: 3px solid #00a65a;">
-                <form method="post">
+                <form method="post" action="/admin/menus">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -111,7 +111,7 @@
     <div class="modal fade" id="modal-update">
         <div class="modal-dialog">
             <div class="modal-content" style="border-top: 3px solid #00c0ef;">
-                <form method="post">
+                <form method="post" action="/admin/menus">
                     <input type="hidden" name="id">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -152,25 +152,35 @@
     <%- include('inc/footer.ejs') -%>
         <!--chama a parte do footer(rodape) da pagina -->
 
+        <script src="/js/hcode-filereader.js"></script>
+        <script src="/js/hcode-formsave.js"></script>
+        <script src="/js/hcode-grid.js"></script>
 
         <script>
-            let formCreate = document.querySelector('#modal-create form') // pega o modal de criar 
+            // cuida do botao de adicionar coisas ao menu
 
-            formCreate.addEventListener('submit', e => { // criar o evento, de quando clicar em enviar
+            new HcodeFileReader("#modal-create [type=file", "#modal-create img");
+            new HcodeFileReader("#modal-update [type=file", "#modal-update img");
 
-                e.preventDefault(); // cancela o enviou padrao
-                let formCreateData = new FormData(formCreate); // passa para objeto, fazendo assim que todos os dados dentro dele fique acessivel
+            new HcodeGrid({ // chama os metodos create, update e delete dos formularios
 
-                fetch('/admin/menus', { // manda os dados via ajax
+                deleteURL: "/admin/menus/${data.id}",
+                deleteMsg: "Deseja realmente excluir o prato ${data.title}?",
+                onUpdateLoad: (formUpdate, name, data) => {
 
-                        method: 'POST', // fala que o metodo agora e post
-                        body: formCreateData
+                    let input = formUpdate.querySelector(`[name=${name}]`); // seleciona o input
 
-                    })
-                    .then(response => response.json())
-                    .then(json => {
+                    switch (name) { // ver o nome
 
-                       window.location.reload(); // recarrega a pagina automaticamente
-                    });
+                        case 'photo':
+                            formUpdate.querySelector('img').src = '/' + data[name];
+                            break;
+                        default: // ser não tiver foto
+                            if (input) // ser existir o input
+                                input.value = data[name]; // passa o campos
+
+                    }
+
+                }
             });
         </script>
