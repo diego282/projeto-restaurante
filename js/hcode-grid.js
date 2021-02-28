@@ -59,43 +59,47 @@ class HcodeGrid {
         // aqui e o formulario de criar outro menu
         this.formCreate = document.querySelector(this.options.formCreate) // pega o modal de criar 
 
-        this.formCreate.save({
+        if (this.formCreate) { // ser o formulario existir
 
-            success: () => {
+            this.formCreate.save({
 
-                this.fireEvents('afterFormCreate'); // faz o reload(resfash) dps que envia o formulario
+                success: () => {
 
-            },
-            failure: err => {
+                    this.fireEvents('afterFormCreate'); // faz o reload(resfash) dps que envia o formulario
 
-
-                this.fireEvents('afterFormCreateError'); // mostra mensagem de erro
-            }
+                },
+                failure: err => {
 
 
-        });
+                    this.fireEvents('afterFormCreateError'); // mostra mensagem de erro
+                }
+            });
 
+        }
 
 
         // aqui e o formulario de editar o menu
         this.formUpdate = document.querySelector(this.options.formUpdate); // seleciona o modal de editar
 
-        this.formUpdate.save({
+        if (this.formUpdate) { // ser o formulario existir
+
+            this.formUpdate.save({
 
 
-            success: () => {
+                success: () => {
 
-                this.fireEvents('afterFormUpdate'); // faz o reload(resfash) dps que update do formulario
+                    this.fireEvents('afterFormUpdate'); // faz o reload(resfash) dps que update do formulario
 
-            },
-            failure: err => {
+                },
+                failure: err => {
 
 
-                this.fireEvents('afterFormUpdateError'); // mostra mensagem de erro
-            }
-        });
-
+                    this.fireEvents('afterFormUpdateError'); // mostra mensagem de erro
+                }
+            });
+        }
     }
+
 
     fireEvents(name, args) {
 
