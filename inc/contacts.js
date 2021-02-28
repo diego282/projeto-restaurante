@@ -42,6 +42,40 @@ module.exports = {
                 });
         });
 
+    },
+
+    getContacts() {
+
+        return new Promise((resolve, reject) => {
+
+            conn.query( // faz a pesquisa dos usuarios no banco de dados
+                "SELECT * FROM  tb_contacts ORDER BY register DESC", (err, results) => { // oega a tabela reservas de acordo com o a data da reserva
+                    if (err) { // caso de errado
+                        reject(err); // mostra erro
+                    }
+
+                    resolve(results); // volta quando da certo
+                });
+        });
+    },
+
+    delete(id) {
+
+        return new Promise((resolve, reject) => {
+
+            conn.query( // faz a pesquisa dos usuarios no banco de dados
+                "DELETE FROM  tb_contacts WHERE id = ?", [
+
+                    id
+
+                ], (err, results) => { // oega a tabela menu de acordo com o titulo
+                    if (err) { // caso de errado
+                        reject(err); // mostra erro
+                    }
+
+                    resolve(results); // volta quando da certo
+                });
+        });
     }
 
 };
