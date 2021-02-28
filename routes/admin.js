@@ -3,6 +3,8 @@ var moment = require('moment'); // isso vai ajuda a formata a data
 const admin = require('./../inc/admin');
 var users = require('./../inc/users');
 var menus = require('./../inc/menus');
+var emails = require('./../inc/emails');
+var contacts = require('./../inc/contacts');
 var reservations = require('./../inc/reservations');
 var router = express.Router();
 let path = require('path');
@@ -83,17 +85,6 @@ router.get("/login", function(req, res, next) { // pagina de login para a admini
 
     users.render(req, res, null) // redenizar a pagina
 });
-
-router.get("/contacts", function(req, res, next) { // rota de contatos na administração
-
-    res.render("admin/contacts", admin.getParams(req)) // redeniza a pagina
-});
-
-router.get("/emails", function(req, res, next) { // rota de emails na administração
-
-    res.render("admin/emails", admin.getParams(req)) // redeniza a pagina
-});
-
 
 
 // ROUTAS DOS MENUS
@@ -250,21 +241,64 @@ router.delete('/users/:id', (req, res, next) => { // deleta itens do menu
     });
 });
 
-// router.delete('/contacts/:id', (req, res, next) => {
+// ROUTAS DOS CONTATOS
 
-//     admin.contactsDelete(req).then(data => {
+router.get("/contacts", function(req, res, next) { // rota users da administração
 
-//         res.send(data);
+    contacts.getContacts().then(data => { // pega as reservas do banco de dados
 
-//     }).catch(err => {
+        res.render("admin/contacts", admin.getParams(req, { // redeniza a pagina
 
-//         res.status(400);
-//         res.send({
-//             error: err
-//         });
+            data
+        }))
+    });
+});
 
-//     });
+router.delete('/contacts/:id', (req, res, next) => { // deleta itens do menu
 
-// });
+    contacts.delete(req.params.id).then(data => {
+
+        res.send(data); // redenizar quando de certo, passado o item data
+
+    }).catch(err => { // aqui se de erro
+
+        res.status(400);
+        res.send({ // redeniza o erro
+            error: err
+        });
+
+    });
+});
+
+
+// ROTAS DO EMAILS
+
+router.get("/emails", function(req, res, next) { // rota users da administração
+
+    emails.getEmails().then(data => { // pega as reservas do banco de dados
+
+        res.render("admin/emails", admin.getParams(req, { // redeniza a pagina
+
+            data
+        }))
+    });
+});
+
+router.delete('/emails/:id', (req, res, next) => { // deleta itens do menu
+
+    emails.delete(req.params.id).then(data => {
+
+        res.send(data); // redenizar quando de certo, passado o item data
+
+    }).catch(err => { // aqui se de erro
+
+        res.status(400);
+        res.send({ // redeniza o erro
+            error: err
+        });
+
+    });
+});
+
 
 module.exports = router;

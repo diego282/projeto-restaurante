@@ -2,9 +2,11 @@ var conn = require('./../inc/db'); // conecta com o banco de dados
 var menus = require('./../inc/menus'); // faz a chamada da 'class'(pasta)
 var reservations = require('./../inc/reservations'); // faz a chamada da 'class'(pasta)
 var contacts = require('./../inc/contacts'); // faz a chamada da 'class'(pasta)
+var emails = require('./../inc/emails'); // faz a chamada da 'class'(pasta)
 var express = require('express');
 var router = express.Router();
 let path = require('path');
+
 
 
 /* GET home page. */
@@ -120,5 +122,16 @@ router.post('/contacts', function(req, res, next) { // pega a rotas da reserva p
 
 });
 
+router.post("/inscrisção", function(req, res, next) {
+
+    emails.save(req).then(results => {
+
+        res.send(results);
+    }).catch(err => {
+
+        res.send(err);
+    });
+
+})
 
 module.exports = router;
